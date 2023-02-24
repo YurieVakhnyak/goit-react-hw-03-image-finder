@@ -10,3 +10,17 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.iconSpin {
+  margin-right: 20px;
+  animation: icon-spin 2s infinite linear;
+}
+
+@keyframes icon-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
