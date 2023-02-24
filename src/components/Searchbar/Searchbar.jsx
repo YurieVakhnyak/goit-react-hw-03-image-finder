@@ -1,23 +1,53 @@
 import css from '../Searchbar/Searchbar.module.css';
 import { FaSearch } from 'react-icons/fa';
+import React, { Component } from 'react';
+import { Notify } from 'notiflix';
 
-export const Searchbar = () => {
-  return (
-    <header className={css.Searchbar}>
-      <form className={css.SearchForm}>
-        <button type="submit" className={css.SearchFormButton}>
-          <FaSearch size={42} />
-          <span className={css.SearchFormButtonLabel}>Search</span>
-        </button>
+export class Searchbar extends Component {
+  state = {
+    searchValue: '',
+  };
 
-        <input
-          className={css.SearchFormInput}
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-      </form>
-    </header>
-  );
-};
+  onSubmitSearch = evt => {
+    evt.preventDefault();
+    if (this.state.searchValue.trim() === '') {
+      Notify.info('Enter something to start');
+      return;
+    }
+    this.props.submitSearchValue(this.state);
+    this.setState({
+      searchValue: '',
+    });
+    console.log('Submitting...');
+  };
+
+  onChangeSearchValue = evt => {
+    const { name, value } = evt.target;
+    this.setState({ [name]: value });
+  };
+
+  // ({ value, onInputSearch, onSubmitSearch
+  //  }) => {
+  render() {
+    return (
+      <header className={css.Searchbar}>
+        <form onSubmit={this.onSubmitSearch} className={css.SearchForm}>
+          <button type="submit" className={css.SearchFormButton}>
+            <FaSearch size={42} />
+            <span className={css.SearchFormButtonLabel}>Search</span>
+          </button>
+
+          <input
+            className={css.SearchFormInput}
+            name="searchValue"
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            onChange={this.onChangeSearchValue}
+          />
+        </form>
+      </header>
+    );
+  }
+}
