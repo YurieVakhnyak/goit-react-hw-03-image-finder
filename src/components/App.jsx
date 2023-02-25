@@ -17,24 +17,6 @@ export class App extends Component {
     searchValue: '',
   };
 
-  // componentDidMount() {
-  //   fetchImages()
-  //     .then(images => {
-  //       this.setState({
-  //         images: images,
-  //       });
-  //       pageNumber += 1;
-  //       const totalHits = parseInt(images.totalHits);
-  //       Notify.success(`Hooray! We found ${totalHits} images`);
-  //       // if (pageNumber > 1 && totalHits > perPage) {
-  //       //   loadMoreBox.style.display = 'flex';
-  //       // } else {
-  //       //   loadMoreBox.style.display = 'none';
-  //       // }
-  //     })
-  //     .catch(error => console.log(error));
-  // }
-
   submitSearchValue = data => {
     const { searchValue } = data;
 

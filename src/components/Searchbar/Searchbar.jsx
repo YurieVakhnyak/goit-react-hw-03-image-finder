@@ -18,7 +18,6 @@ export class Searchbar extends Component {
     this.setState({
       searchValue: '',
     });
-    console.log('Submitting...');
   };
 
   onChangeSearchValue = evt => {
