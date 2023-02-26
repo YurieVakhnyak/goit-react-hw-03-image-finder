@@ -4,10 +4,33 @@ import { Modal } from '../Modal/Modal';
 import { ImSpinner9 } from 'react-icons/im';
 
 export class ImageGalleryItem extends Component {
-  state = {
-    showModal: false,
-    loading: true,
-  };
+  constructor(props) {
+    super(props);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.state = {
+      showModal: false,
+      loading: true,
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  handleKeyPress(event) {
+    if (event.keyCode === 27) {
+      // обробка натискання клавіші Escape
+
+      console.log('Escape key pressed');
+      this.setState(() => ({
+        showModal: false,
+      }));
+    }
+  }
 
   handleImageLoad = () => {
     this.setState({ loading: false });
@@ -15,19 +38,17 @@ export class ImageGalleryItem extends Component {
 
   toggleModal = evt => {
     evt.preventDefault();
-    console.log(evt.target);
-    console.log(evt.target.src);
 
     this.setState(({ showModal }) => ({
       showModal: !showModal,
-      target: evt.target,
+      // target: evt.target,
     }));
   };
 
   render() {
     const { showModal, loading } = this.state;
     const { webformatURL, largeImageURL, tags } = this.props;
-    console.log(showModal);
+
     if (showModal) {
       return (
         <Modal className={css.ImageGalleryItem} onClick={this.toggleModal}>

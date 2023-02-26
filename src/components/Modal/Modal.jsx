@@ -4,11 +4,11 @@ import css from '../Modal/Modal.module.css';
 
 export class Modal extends Component {
   componentDidMount() {
-    console.log('DidMount');
+    // console.log('DidMount');
   }
 
   componentWillUnmount() {
-    console.log('WillUnmount');
+    // console.log('WillUnmount');
   }
 
   render() {

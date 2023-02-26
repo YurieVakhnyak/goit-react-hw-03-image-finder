@@ -1,26 +1,17 @@
 import React, { Component } from 'react';
-// import { Notify } from 'notiflix';
 // import axios from 'axios';
-
-import { BallTriangle } from 'react-loader-spinner';
+import { InfinitySpin } from 'react-loader-spinner';
 import { ImagesErrorView } from '../ImagesErrorView/ImagesErrorView';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { LoadMoreButton } from 'components/LoadMoreButton/LoadMoreButton';
 import css from '../ImageGallery/ImageGallery.module.css';
+import { Notify } from 'notiflix';
 
 const API_KEY = '33411326-e3b74484d09501fb125cb8795';
 
 let perPage = 12;
 
 export class ImageGallery extends Component {
-  constructor(props) {
-    super(props);
-
-    // this.listRef = null;
-    // this.setListRef = element => {
-    //   this.listRef = element;
-    // };
-  }
   state = {
     images: null,
     error: null,
@@ -33,9 +24,6 @@ export class ImageGallery extends Component {
     this.setState(prevState => ({
       pageNumber: prevState.pageNumber + 1,
     }));
-
-    // const listNode = this.listRef.current;
-    // listNode.scrollTop = listNode.scrollHeight;
 
     console.log(this.state.pageNumber);
   };
@@ -78,22 +66,16 @@ export class ImageGallery extends Component {
   render() {
     const { images, error, status, pageNumber } = this.state;
     if (status === 'idle') {
-      return <div>Тут будуть картинки, якщо ти введеш запит...</div>;
+      return (
+        <div className={css.firstSpinner}>
+          Тут будуть картинки за Вашим запитом...
+        </div>
+      );
     }
     if (status === 'pending') {
       return (
         <div className={css.firstSpinner}>
-          <BallTriangle
-            height={300}
-            width={300}
-            radius={5}
-            color="#4fa94d"
-            ariaLabel="ball-triangle-loading"
-            wrapperClass={{}}
-            wrapperStyle=""
-            visible={true}
-          />
-          Завантаження триває...
+          <InfinitySpin width="200" color="blue" />
         </div>
       );
     }
@@ -101,27 +83,32 @@ export class ImageGallery extends Component {
     if (status === 'rejected') {
       return <ImagesErrorView message={error.message} />;
     }
+    if (status === 'resolved' && this.state.images.totalHits === 0) {
+      return Notify.failure('На жаль, нічого не знайдено...');
+    }
     if (status === 'resolved') {
       const startIndex = 0;
       const endIndex = pageNumber * perPage;
 
       const currentImages = images.hits.slice(startIndex, endIndex);
       return (
-        <ul className={css.ImageGallery} setListRef={this.setListRef}>
-          {currentImages.map(({ id, webformatURL, largeImageURL, tags }) => (
-            <ImageGalleryItem
-              key={id}
-              showLargeImage={this.state.showLargeImage}
-              webformatURL={webformatURL}
-              largeImageURL={largeImageURL}
-              tags={tags}
-              onClickImage={this.toggleModal}
-            />
-          ))}
+        <div className={css.GalleryThumb}>
+          <ul className={css.ImageGallery}>
+            {currentImages.map(({ id, webformatURL, largeImageURL, tags }) => (
+              <ImageGalleryItem
+                key={id}
+                showLargeImage={this.state.showLargeImage}
+                webformatURL={webformatURL}
+                largeImageURL={largeImageURL}
+                tags={tags}
+                onClickImage={this.toggleModal}
+              />
+            ))}
+          </ul>
           {currentImages.length < images.totalHits && (
             <LoadMoreButton loadMoreImages={this.loadMoreImages} />
           )}
-        </ul>
+        </div>
       );
     }
   }

@@ -32,7 +32,7 @@ export class Searchbar extends Component {
       <header className={css.Searchbar}>
         <form onSubmit={this.onSubmitSearch} className={css.SearchForm}>
           <button type="submit" className={css.SearchFormButton}>
-            <FaSearch size={42} />
+            <FaSearch size={35} />
             <span className={css.SearchFormButtonLabel}>Search</span>
           </button>
 
